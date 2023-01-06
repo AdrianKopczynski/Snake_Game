@@ -30,6 +30,7 @@ void coolPrint(string string,int x){
 		cout << string[i];
 		Sleep(x);
 	}
+	cout << endl;
 }
 void titlePrint(){
 	cout << "------------------------------------------------------------------" << endl;
@@ -48,8 +49,16 @@ void hScoreLoad(){
 	hScoreLoad.close(); 	
 }
 void welcomeScreen(){
-	titlePrint();
-	cout << "			    ";
+	coolPrint("------------------------------------------------------------------",10);
+	coolPrint("    _________    ____     __       ___       __   ___  ________",10);
+	coolPrint("   / ________\\  |    \\   |  |     /   \\     |  | /  / |  ______| ",10);
+	coolPrint("  |  |_______   |     \\  |  |    /  _  \\    |  |/  /  |  |____",10);
+	coolPrint("   \\_______  \\  |  |\\  \\ |  |   /  /_\\  \\   |     /   |  _____|",10);
+	coolPrint("    _______|  | |  | \\  \\|  |  /  _____  \\  |  |\\  \\  |  |_____",10);
+	coolPrint("   /_________/  |__|  \\_____| /__/     \\__\\ |__| \\__\\ |________|",10);
+	cout << endl;
+	coolPrint("------------------------------------------------------------------",10);
+	cout << endl <<"			    ";
 	coolPrint("Press any key",50);
 	bool isKeyPressed = false;
 	int keyPressed = getch();
@@ -90,11 +99,8 @@ int choice(){
 }
 void menu(){
 	coolPrint("Selcet a difficulty level.",10);
-	cout << endl;;
 	coolPrint("1. Easy", 10);
-	cout << endl;
 	coolPrint("2. Normal", 10);
-	cout << endl;
 	coolPrint("3. Hard", 10);
     difficulty = choice(); // czekamy az uzytkownik wybierze poziom trudnosci, 49-"1" 50-"2" 51-"3"
     system("cls");
@@ -110,16 +116,13 @@ void menu(){
 		selectedDif = "Selcected difficulty is: Hard.";
 	}
 	coolPrint (selectedDif, 10);
-	cout << endl;
     coolPrint("Select board size :",10);
-    cout << endl;
     coolPrint("1. Small", 10);
-	cout << endl;
 	coolPrint("2. Normal", 10);
-	cout << endl;
 	coolPrint("3. XXL", 10);
 }
 int main(){
+	Sleep(100);
 	welcomeScreen();
 	menu();
 	return 0;
