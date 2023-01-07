@@ -25,14 +25,16 @@ using namespace std;
 	hScoreSave.close();*/
 
 const int defSnakeLength = 2; // Ustanowienie domyœlnej d³ugoœci cia³a wê¿a jako 2 wg specyfikacji zadania
-string hScore,head,body,blank,mapBorder;
-int difficulty,sizeOfMap,size,buttonPressed,snakeBodyLength,direction,tableRows,tableColumn,headCordinates,gameSpeed,tempX,tempY;
+string hScore,head = "@ ",body = "# ",blank = "  ",mapBorder = "X ",food = "O ";
+int difficulty,sizeOfMap,size,buttonPressed,snakeBodyLength,direction,tableRows,tableColumn,headCordinates,gameSpeed,tempX,tempY,score,minFoodCord,maxFoodCord;
 bool lose=false;
+bool isFoodConsumed=false;
 vector <int> headCords(2);
 vector <int> bodyX(2);
 vector <int> bodyY(2);
 vector <int> bodyTemp(2);
 vector <int> blankSpace(2);
+vector <int> foodLocation(2);
 
 void coolPrint(string string,int x){
 	//fukncja wypisuje podany string znak po znaku z przerwami podanymi przez uzytkownika 
@@ -192,10 +194,6 @@ void buttonPress(){
 
 int main(){
 	hScoreLoad();
-	head = "@ ";
-	body = "# ";
-	blank = "  ";
-	mapBorder = "X ";
 	Sleep(100);
 	//welcomeScreen();
 	menu();
@@ -216,6 +214,8 @@ int main(){
 		}
 	}
 	headCordinates = (size-1)/2;
+	minFoodCord=1;
+	maxFoodCord=size-2;
 	map[headCordinates][headCordinates] = head;
 	map[headCordinates+1][headCordinates] = body;
 	map[headCordinates+2][headCordinates] = body;
@@ -228,6 +228,8 @@ int main(){
 	bodyY[1]=headCordinates+2;
 	blankSpace[0]=headCordinates;
 	blankSpace[1]=headCordinates+3;
+	food[0] = 2;
+	food[1] = 2;
 	for(int i=0;i<size;i++){
 		for(int j=0;j<size;j++){
 			cout<<map[i][j];
@@ -248,8 +250,13 @@ int main(){
 	do{
 		buttonPress();
 		system("cls");
-		//blank[0] = bodyX[snakeBodyLength-1];
-		//blank[1] = bodyY[snakeBodyLength-1];
+		if(isFoodConsumed==true){
+			//losowe generowanie koordynatów jedzenia gdy poprzednie zosta³o zjedzone 
+			food[0] = (rand() % (minFoodCord + maxFoodCord));
+			food[1] = (rand() % (minFoodCord + maxFoodCord));
+			isFoodConsumed=false;
+		}
+		map[food[0]][food[1]] = food;
 		tempX = bodyX[0];
 		tempY = bodyY[0];
 		bodyX[0] = headCords[1];
@@ -265,15 +272,55 @@ int main(){
 		blankSpace[0] = tempY;
 		blankSpace[1] = tempX;
 		if(direction == 0){
+			if(map[(headCords[0]-1)][headCords[1]] == food){
+				score +=1;
+				snakeBodyLength +=1;
+				bodyY.push_back(blankSpace[0]);
+				bodyX.push_back(blankSpace[1]);
+				isFoodConsumed=true;
+			}
+			else if(map[headCords[0]-1][headCords[1]] == mapBorder || map[headCords[0]-1][headCords[1]] == body){
+				lose = true;
+			}
 			headCords[0] -= 1;
 		}
 		else if(direction == 1){
+			if(map[headCords[0]][headCords[1]+1] == food){
+				score +=1;
+				snakeBodyLength +=1;
+				bodyY.push_back(blankSpace[0]);
+				bodyX.push_back(blankSpace[1]);
+				isFoodConsumed=true;
+			}
+			else if(map[headCords[0]][headCords[1]+1] == mapBorder || map[headCords[0]][headCords[1]+1] == body){
+				lose = true;
+			}
 			headCords[1] += 1;
 		}
 		else if(direction == 2){
+			if(map[headCords[0]+1][headCords[1]] == food){
+				score +=1;
+				snakeBodyLength +=1;
+				bodyY.push_back(blankSpace[0]);
+				bodyX.push_back(blankSpace[1]);
+				isFoodConsumed=true;
+			}
+			else if(map[headCords[0]+1][headCords[1]] == mapBorder || map[headCords[0]+1][headCords[1]] == body){
+				lose = true;
+			}
 			headCords[0] += 1;
 		}
 		else if(direction == 3){
+			if(map[headCords[0]][headCords[1]-1] == food){
+				score +=1;
+				snakeBodyLength +=1;
+				bodyY.push_back(blankSpace[0]);
+				bodyX.push_back(blankSpace[1]);
+				isFoodConsumed=true;
+			}
+			else if(map[headCords[0]][headCords[1]-1] == mapBorder|| map[headCords[0]][headCords[1]-1] == body){
+				lose = true;
+			}
 			headCords[1] -= 1;
 		}
 		map[headCords[0]][headCords[1]] = head;
@@ -290,9 +337,6 @@ int main(){
 		}
 		Sleep(gameSpeed);
 		buttonPress();
-		if(headCords[0]+1 == 26||headCords[1]+1==26||headCords[0]-1==0 || headCords[1]-1==0){
-			lose = true;
-		}
 	}while(lose==false);
 	
 	return 0;
