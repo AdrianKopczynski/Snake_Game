@@ -254,7 +254,7 @@ int main(){
 		tempY = bodyY[0];
 		bodyX[0] = headCords[1];
 		bodyY[0] = headCords[0];	
-		for(int i = 1; i==snakeBodyLength;i++){
+		for(int i = 1; i<snakeBodyLength;i++){
 			bodyTemp[0] = bodyY[i];
 			bodyTemp[1] = bodyX[i];
 			bodyX[i] = tempX;
