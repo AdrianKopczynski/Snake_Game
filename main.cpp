@@ -362,11 +362,8 @@ int main(){
 		hScoreSave.close();
 	}
 	cout << "Do you want to play again?(y/n)";
-	while(kbhit()){
-		usrInput = getch(); //y=121, n=110
-	}
 	int done;
-	do
+	do //y=121, n=110
 	{
     	done = 1;
     	int c =getch(); 
@@ -386,6 +383,8 @@ int main(){
     	}
 	} while ( !done );
 	if(usrInput==121){
+		score=0;
+		lose=false;
 		system("cls");
 		main();
 	}
