@@ -18,8 +18,7 @@
 
 using namespace std;
 
-//const int defSnakeLength = 2; // Ustanowienie domyœlnej d³ugoœci cia³a wê¿a jako 2 wg specyfikacji zadania
-string result,head = "@ ",body = "# ",blank = "  ",mapBorder = "X ",food = "O ";
+string head = "@ ",body = "# ",blank = "  ",mapBorder = "X ",food = "O ";
 int hScore,difficulty,sizeOfMap,size,buttonPressed,snakeBodyLength,direction,tableRows,tableColumn,headCordinates,gameSpeed,tempX,tempY,score,minFoodCord,maxFoodCord,usrInput,hScoreLast;
 bool lose=false;
 bool isFoodConsumed=false;
