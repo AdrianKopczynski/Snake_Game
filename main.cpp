@@ -15,13 +15,12 @@
 #include <cstdlib>
 #include <vector>
 #include <unistd.h>
-#include <sstream>
 
 using namespace std;
 
-const int defSnakeLength = 2; // Ustanowienie domyœlnej d³ugoœci cia³a wê¿a jako 2 wg specyfikacji zadania
-string hScore,result,head = "@ ",body = "# ",blank = "  ",mapBorder = "X ",food = "O ";
-int difficulty,sizeOfMap,size,buttonPressed,snakeBodyLength,direction,tableRows,tableColumn,headCordinates,gameSpeed,tempX,tempY,score,minFoodCord,maxFoodCord,usrInput,hScoreLast;
+//const int defSnakeLength = 2; // Ustanowienie domyœlnej d³ugoœci cia³a wê¿a jako 2 wg specyfikacji zadania
+string result,head = "@ ",body = "# ",blank = "  ",mapBorder = "X ",food = "O ";
+int hScore,difficulty,sizeOfMap,size,buttonPressed,snakeBodyLength,direction,tableRows,tableColumn,headCordinates,gameSpeed,tempX,tempY,score,minFoodCord,maxFoodCord,usrInput,hScoreLast;
 bool lose=false;
 bool isFoodConsumed=false;
 bool resume;
@@ -57,8 +56,26 @@ void titlePrint(){
 void hScoreLoad(){
 	//odczyt najwyzszego uzyskanego wyniku z pliku hScore.txt
 	ifstream hScoreLoad("hScore.txt");
-	getline(hScoreLoad, hScore); // pobieramy wartosc najwyzszego wyniku z pliku i przekazujemy te wartosc to zmiennej hScore
-	hScoreLoad.close(); 	
+	//hScoreLoad.open();
+	hScoreLoad >> hScore;
+	//getline(hScoreLoad, hScore); // pobieramy wartosc najwyzszego wyniku z pliku i przekazujemy te wartosc to zmiennej hScore
+	hScoreLoad.close();	
+}
+
+void hScoreSave(){
+	
+	if(score > hScore){
+		cout << "New highest score!!   " << score << endl;
+		//zapis najwyzszego uzyskanego wyniku w pliku hScore.txt
+		ofstream hScoreSave("hScore.txt");
+		hScoreSave << score; 
+		hScoreSave.close();
+		
+	}
+	else{
+		cout << "Your score: " << score << endl;
+		cout << "Highest score: " << hScore << endl;
+	}
 }
 
 void welcomeScreen(){
@@ -158,13 +175,13 @@ void menu(){
 int declareSize(int size){
 	int sizeOf;
 	if(size ==1){
-		sizeOf = 9;
+		sizeOf = 11;
 	}
 	else if (size ==2){
 		sizeOf = 17;
 	}
 	else {
-		sizeOf = 27;
+		sizeOf = 23;
 	}
 	return sizeOf;
 }
@@ -253,6 +270,7 @@ int main(){
 			//losowe generowanie koordynatów jedzenia gdy poprzednie zosta³o zjedzone 
 			foodLocation[0] = (rand() % (minFoodCord + maxFoodCord));
 			foodLocation[1] = (rand() % (minFoodCord + maxFoodCord));
+			//sprawdzamy czy wylosowane koordynaty jedzenia nie s¹ równe z granic¹ mapy, g³ow¹ lub cia³em wê¿a, jeœli tak, to generujemy je na nowo
 			if(map[foodLocation[0]][foodLocation[1]] == mapBorder || map[foodLocation[0]][foodLocation[1]] == head || map[foodLocation[0]][foodLocation[1]] == body ){
 				foodLocation[0] = (rand() % (minFoodCord + maxFoodCord));
 				foodLocation[1] = (rand() % (minFoodCord + maxFoodCord));
@@ -346,21 +364,7 @@ int main(){
 		buttonPress();
 	}while(lose==false);
 	cout <<endl<<endl;
-	istringstream(hScore) >> hScoreLast;
-	if(score < hScoreLast){
-		cout << "Your score: " << score << endl;
-		cout << "Highest score: " << hScore << endl;
-	}
-	else{
-		cout << "New highest score!!   " << score << endl;
-		//zapis najwyzszego uzyskanego wyniku w pliku hScore.txt
-		result = score;
-		cout << result;
-		ofstream hScoreSave;
-		hScoreSave.open("hScore.txt");
-		hScoreSave << result; 
-		hScoreSave.close();
-	}
+	hScoreSave();
 	cout << "Do you want to play again?(y/n)";
 	int done;
 	do //y=121, n=110
